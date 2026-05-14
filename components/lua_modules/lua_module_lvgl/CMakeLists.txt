@@ -1,6 +1,14 @@
 idf_component_register(
     SRCS
         "src/lua_module_lvgl.c"
+        "src/lua_lvgl_core_widgets.c"
+        "src/lua_lvgl_extra_widgets.c"
+        "src/lua_lvgl_layout.c"
+        "src/lua_lvgl_object.c"
+        "src/lua_lvgl_parse.c"
+        "src/lua_lvgl_runtime.c"
+        "src/lua_lvgl_style.c"
+        "src/lua_lvgl_value.c"
     INCLUDE_DIRS
         "src"
     REQUIRES

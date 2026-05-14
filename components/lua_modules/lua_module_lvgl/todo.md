@@ -24,56 +24,49 @@ notification, and clearer display ownership errors.
   - Current cleanup favors avoiding use-after-free over reclaiming every record
     immediately.
 
-## P1: missing v1-polish APIs
+## P1: v1 polish APIs and widget coverage
 
-- Add getters for basic object state.
+Status: implemented for v1.
+
+- Implemented basic getters and validity checks.
   - `get_pos(obj) -> x, y`
   - `get_size(obj) -> w, h`
-  - `get_value(obj) -> value` for bar/slider
+  - `get_value(obj) -> value`
   - `is_valid(obj) -> boolean`
 
-- Add value setters for numeric widgets.
+- Implemented value and range setters.
   - `set_value(obj, value[, anim])`
   - `set_range(obj, min, max)`
-  - Current `value`, `min`, and `max` are only available at creation time.
+  - Supports bar, slider, arc, scale, dropdown, roller, checkbox, and switch
+    where applicable.
 
-- Expand text support.
-  - `set_text()` currently supports label objects only.
-  - Button text is implemented as an internal child label, but the returned
-    button userdata cannot update that label later.
-  - Decide whether button returns both button and label, stores the child label,
-    or exposes a dedicated `set_button_text()`.
+- Expanded text support.
+  - `set_text()` supports label, button, checkbox, dropdown, textarea, and list
+    text/button handles.
+  - Button records keep the internal label pointer so button text can be updated
+    later.
 
-- Expose a generic container/object constructor.
-  - Add `lvgl.object(parent, opts)` or `lvgl.container(parent, opts)`.
-  - This is useful for grouping without exposing the full LVGL API.
+- Added generic object/container constructors and constrained style helpers.
+  - `object(parent, opts)` and `container(parent, opts)`
+  - `set_style(obj, opts)` plus style fields in creation opts.
+  - Style remains selector `0` only; advanced LVGL parts/states are still out of
+    scope.
 
-- Add screen background and simple object style helpers.
-  - Background color, text color, font size/default font choice, border color,
-    radius, padding, opacity.
-  - Keep this as a constrained style API instead of mapping the full LVGL style
-    system at once.
+- Added P1 widget constructors.
+  - `image`, `line`, `arc`, `spinner`, `scale`, `checkbox`, `switch`,
+    `dropdown`, `roller`, `keyboard`, `list`, `textarea`, and `table`.
+  - `line` stores C-owned point buffers.
+  - `image` only forwards string `src`; FS/decoder setup remains P2.
 
-## P1: widget coverage
+- Added layout primitives.
+  - `set_flex`
+  - `set_grid`
+  - `set_grid_cell`
+  - `set_scroll`
+  - Grid descriptor buffers are C-owned and replaced safely by subsequent
+    `set_grid()` calls.
 
-- Add common display-only widgets.
-  - `image` is blocked on LVGL FS/image decoder decisions.
-  - `line`, `arc`, `spinner`, `scale`, `table`, and `textarea` need per-widget
-    API design before implementation.
-
-- Add controls needed for simple apps.
-  - `checkbox`
-  - `switch`
-  - `dropdown`
-  - `roller`
-  - `keyboard`
-  - `list`
-
-- Add layout primitives.
-  - Flex layout helpers.
-  - Grid layout helpers.
-  - Scroll flags and scrollbar mode.
-  - Parent/child ordering helpers such as move foreground/background.
+- Follow-up: add parent/child ordering helpers such as move foreground/background.
 
 ## P2: events and input devices
 
