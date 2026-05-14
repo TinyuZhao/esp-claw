@@ -217,6 +217,19 @@ static void cap_lua_run_runtime_cleanups(void)
     }
 }
 
+static void cap_lua_run_state_cleanups(lua_State *L)
+{
+    size_t i;
+
+    for (i = 0; i < cap_lua_get_state_cleanup_count(); i++) {
+        cap_lua_state_cleanup_fn_t cleanup_fn = cap_lua_get_state_cleanup(i);
+
+        if (cleanup_fn) {
+            cleanup_fn(L);
+        }
+    }
+}
+
 static void cap_lua_add_script_dir_to_package_path(lua_State *L, const char *script_path)
 {
     const char *current_path = NULL;
@@ -373,6 +386,7 @@ esp_err_t cap_lua_runtime_execute_file(const char *path,
     lua_sethook(L, cap_lua_timeout_hook, LUA_MASKCOUNT, 100);
 
     status = luaL_dofile(L, path);
+    cap_lua_run_state_cleanups(L);
     cap_lua_run_runtime_cleanups();
     if (status != LUA_OK) {
         const char *msg = lua_tostring(L, -1);

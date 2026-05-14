@@ -90,6 +90,8 @@ size_t cap_lua_get_module_count(void);
 const cap_lua_module_t *cap_lua_get_module(size_t index);
 size_t cap_lua_get_runtime_cleanup_count(void);
 cap_lua_runtime_cleanup_fn_t cap_lua_get_runtime_cleanup(size_t index);
+size_t cap_lua_get_state_cleanup_count(void);
+cap_lua_state_cleanup_fn_t cap_lua_get_state_cleanup(size_t index);
 
 esp_err_t cap_lua_async_init(void);
 esp_err_t cap_lua_async_start(void);

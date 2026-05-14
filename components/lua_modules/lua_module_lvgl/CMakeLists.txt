@@ -1,0 +1,12 @@
+idf_component_register(
+    SRCS
+        "src/lua_module_lvgl.c"
+    INCLUDE_DIRS
+        "src"
+    REQUIRES
+        cap_lua
+        display_arbiter
+        esp_lcd
+        esp_timer
+        lvgl
+)
